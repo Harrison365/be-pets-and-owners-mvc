@@ -1,5 +1,11 @@
-const { fetchOwnerById, fetchOwners, fetchOwners2 } = require("./models.js");
+const {
+  fetchOwnerById,
+  fetchOwners,
+  fetchOwners2,
+  fetchPetsOfOwner,
+} = require("./models.js");
 
+// TASK 1
 const getOwnersById = (req, res) => {
   const { id } = req.params;
   fetchOwnerById(id)
@@ -11,6 +17,7 @@ const getOwnersById = (req, res) => {
     });
 };
 
+//TASK 2
 const getOwners = (req, res) => {
   fetchOwners()
     .then((ownerArrJS) => {
@@ -21,6 +28,7 @@ const getOwners = (req, res) => {
     });
 };
 
+//TASK 2 Second Solution
 const getOwners2 = (req, res) => {
   fetchOwners2()
     .then((ownersJS) => {
@@ -31,4 +39,16 @@ const getOwners2 = (req, res) => {
     });
 };
 
-module.exports = { getOwnersById, getOwners, getOwners2 };
+//TASK 3
+const getPetsOfOwner = (req, res) => {
+  const { id } = req.params;
+  fetchPetsOfOwner(id)
+    .then((petsOfOwnerJS) => {
+      res.send(petsOfOwnerJS);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+module.exports = { getOwnersById, getOwners, getOwners2, getPetsOfOwner };

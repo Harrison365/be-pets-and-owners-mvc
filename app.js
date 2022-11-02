@@ -4,7 +4,12 @@
 
 const express = require("express");
 const fs = require("fs/promises");
-const { getOwnersById, getOwners, getOwners2 } = require("./controllers.js");
+const {
+  getOwnersById,
+  getOwners,
+  getOwners2,
+  getPetsOfOwner,
+} = require("./controllers.js");
 const app = express();
 app.use(express.json()); // allows us to access post request body.
 
@@ -14,41 +19,17 @@ app.get("/api/owners/:id", getOwnersById);
 
 //TASK 2
 
-// app.get("/api/owners", getOwners);
+app.get("/api/owners", getOwners);
 
 //TASK 2 but with .push instead
 
-app.get("/api/owners", getOwners2);
+app.get("/api/ownersii", getOwners2);
 
 //TASK 3
 
-app.get("/api/owners/:id/pets", (req, res) => {
-  const { id } = req.params;
-  fs.readdir("./data/pets", "utf8")
-    .then((pets) => {
-      const promiseArr = pets.map((petsFile) => {
-        return fs.readFile(`./data/pets/${petsFile}`, "utf8");
-      });
-      return Promise.all(promiseArr);
-    })
-    .then((petsInfoArr) => {
-      const petsOfOwner = petsInfoArr
-        .map((pet) => {
-          return JSON.parse(pet);
-        })
-        .filter((petJS) => {
-          return petJS.owner === `o${id}`;
-        });
-      res.send(petsOfOwner);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
+app.get("/api/owners/:id/pets", getPetsOfOwner);
 
 //TASK 4
-//same as get all owners but for pets. then filter based on req.query
-
 app.get("/api/pets", (req, res) => {
   let query = req.query.temperament;
 
@@ -91,21 +72,22 @@ app.get("/api/pets/:id", (req, res) => {
     });
 });
 
-//TASK 6
-// app.patch("/api/owners/:id/edit", (req, res) => {
-//   const { id } = req.params;
-//   const ownerUpdated = req.body;
-
-//   fs.writeFile(`./data/owners/o${id}.json`, JSON.stringify(ownerUpdated))
-//     .then(() => {
-//       res.status(201).send(ownerUpdated);
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     });
-// });
-
+//TASK 6 update owner ID included in body
 app.patch("/api/owners/:id/edit", (req, res) => {
+  const { id } = req.params;
+  const ownerUpdated = req.body;
+
+  fs.writeFile(`./data/owners/o${id}.json`, JSON.stringify(ownerUpdated))
+    .then(() => {
+      res.status(201).send(ownerUpdated);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
+//TASK 6 if ID not included in patch request body
+app.patch("/api/owners/:id/editii", (req, res) => {
   const { id } = req.params;
   const body = req.body;
   globalOwner = "";
@@ -127,6 +109,7 @@ app.patch("/api/owners/:id/edit", (req, res) => {
     });
 });
 
+//TASK 7
 app.post("/api/owners/create", (req, res) => {
   let body = req.body;
   let newId = Date.now();

@@ -1,5 +1,6 @@
 const fs = require("fs/promises");
 
+//TASK 1
 const fetchOwnerById = (idNumber) => {
   return fs
     .readFile(`./data/owners/o${idNumber}.json`, "utf8")
@@ -8,6 +9,7 @@ const fetchOwnerById = (idNumber) => {
     });
 };
 
+//TASK 2
 const fetchOwners = () => {
   return fs
     .readdir("./data/owners", "utf8")
@@ -24,6 +26,7 @@ const fetchOwners = () => {
     });
 };
 
+//TASK 2 Second Solution
 const fetchOwners2 = () => {
   return fs
     .readdir("./data/owners", "utf8")
@@ -41,4 +44,30 @@ const fetchOwners2 = () => {
     });
 };
 
-module.exports = { fetchOwnerById, fetchOwners, fetchOwners2 };
+//TASK 3
+fetchPetsOfOwner = (id) => {
+  return fs
+    .readdir("./data/pets", "utf8")
+    .then((pets) => {
+      const promiseArr = pets.map((petsFile) => {
+        return fs.readFile(`./data/pets/${petsFile}`, "utf8");
+      });
+      return Promise.all(promiseArr);
+    })
+    .then((petsInfoArr) => {
+      return petsInfoArr
+        .map((pet) => {
+          return JSON.parse(pet);
+        })
+        .filter((petJS) => {
+          return petJS.owner === `o${id}`;
+        });
+    });
+};
+
+module.exports = {
+  fetchOwnerById,
+  fetchOwners,
+  fetchOwners2,
+  fetchPetsOfOwner,
+};
