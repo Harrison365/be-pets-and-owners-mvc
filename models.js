@@ -24,4 +24,21 @@ const fetchOwners = () => {
     });
 };
 
-module.exports = { fetchOwnerById, fetchOwners };
+const fetchOwners2 = () => {
+  return fs
+    .readdir("./data/owners", "utf8")
+    .then((owners) => {
+      let arr = [];
+      owners.forEach((ownerFile) => {
+        arr.push(fs.readFile(`./data/owners/${ownerFile}`, "utf8"));
+      });
+      return Promise.all(arr);
+    })
+    .then((arr) => {
+      return arr.map((string) => {
+        return JSON.parse(string);
+      });
+    });
+};
+
+module.exports = { fetchOwnerById, fetchOwners, fetchOwners2 };

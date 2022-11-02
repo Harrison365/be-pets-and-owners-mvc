@@ -4,7 +4,7 @@
 
 const express = require("express");
 const fs = require("fs/promises");
-const { getOwnersById, getOwners } = require("./controllers.js");
+const { getOwnersById, getOwners, getOwners2 } = require("./controllers.js");
 const app = express();
 app.use(express.json()); // allows us to access post request body.
 
@@ -14,30 +14,11 @@ app.get("/api/owners/:id", getOwnersById);
 
 //TASK 2
 
-app.get("/api/owners", getOwners);
+// app.get("/api/owners", getOwners);
 
 //TASK 2 but with .push instead
 
-app.get("/api/owners", (req, res) => {
-  fs.readdir("./data/owners", "utf8")
-    .then((owners) => {
-      let arr = [];
-
-      owners.forEach((ownerFile) => {
-        arr.push(fs.readFile(`./data/owners/${ownerFile}`, "utf8"));
-      });
-      return Promise.all(arr);
-    })
-    .then((arr) => {
-      const JS = arr.map((string) => {
-        return JSON.parse(string);
-      });
-      res.send(JS);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
+app.get("/api/owners", getOwners2);
 
 //TASK 3
 

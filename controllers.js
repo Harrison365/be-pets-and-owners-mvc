@@ -1,4 +1,4 @@
-const { fetchOwnerById, fetchOwners } = require("./models.js");
+const { fetchOwnerById, fetchOwners, fetchOwners2 } = require("./models.js");
 
 const getOwnersById = (req, res) => {
   const { id } = req.params;
@@ -21,4 +21,14 @@ const getOwners = (req, res) => {
     });
 };
 
-module.exports = { getOwnersById, getOwners };
+const getOwners2 = (req, res) => {
+  fetchOwners2()
+    .then((ownersJS) => {
+      res.send(ownersJS);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+module.exports = { getOwnersById, getOwners, getOwners2 };
