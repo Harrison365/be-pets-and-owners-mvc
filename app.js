@@ -4,67 +4,40 @@
 
 const express = require("express");
 const fs = require("fs/promises");
+const { getOwnersById, getOwners } = require("./controllers.js");
 const app = express();
 app.use(express.json()); // allows us to access post request body.
 
 //TASK 1
 
-app.get("/api/owners/:id", (req, res) => {
-  const { id } = req.params;
-  fs.readFile(`./data/owners/o${id}.json`, "utf8")
-    .then((ownerInfo) => {
-      const ownerJS = JSON.parse(ownerInfo);
-      res.send(ownerJS);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
+app.get("/api/owners/:id", getOwnersById);
 
 //TASK 2
 
+app.get("/api/owners", getOwners);
+
+//TASK 2 but with .push instead
+
 app.get("/api/owners", (req, res) => {
-  fs.readdir("./data/owners", "utf8") //readir returns an array of file names
+  fs.readdir("./data/owners", "utf8")
     .then((owners) => {
-      const promiseArr = owners.map((ownerFile) => {
-        //then we map through the file names and read them. the return the parsed constents to the map array. However these are all promises.
-        return fs.readFile(`./data/owners/${ownerFile}`, "utf8");
+      let arr = [];
+
+      owners.forEach((ownerFile) => {
+        arr.push(fs.readFile(`./data/owners/${ownerFile}`, "utf8"));
       });
-      return Promise.all(promiseArr); //To solve this array of promises we use Promise.all()
+      return Promise.all(arr);
     })
-    .then((ownerInfoArr) => {
-      const ownerInfoArrJS = ownerInfoArr.map((ownerString) => {
-        return JSON.parse(ownerString);
+    .then((arr) => {
+      const JS = arr.map((string) => {
+        return JSON.parse(string);
       });
-      res.send(ownerInfoArrJS);
+      res.send(JS);
     })
     .catch((err) => {
       console.log(err);
     });
 });
-
-//TASK 2 but with .push instead
-
-// app.get("/api/owners", (req, res) => {
-//   fs.readdir("./data/owners", "utf8")
-//     .then((owners) => {
-//       let arr = [];
-
-//       owners.forEach((ownerFile) => {
-//         arr.push(fs.readFile(`./data/owners/${ownerFile}`, "utf8"));
-//       });
-//       return Promise.all(arr);
-//     })
-//     .then((arr) => {
-//       const JS = arr.map((string) => {
-//         return JSON.parse(string);
-//       });
-//       res.send(JS);
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     });
-// });
 
 //TASK 3
 
