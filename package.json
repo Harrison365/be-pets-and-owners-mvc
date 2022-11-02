@@ -1,0 +1,26 @@
+{
+  "name": "be-pets-and-owners-mvc",
+  "version": "1.0.0",
+  "description": "test test",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Harrison365/be-pets-and-owners-mvc.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Harrison365/be-pets-and-owners-mvc/issues"
+  },
+  "homepage": "https://github.com/Harrison365/be-pets-and-owners-mvc#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
