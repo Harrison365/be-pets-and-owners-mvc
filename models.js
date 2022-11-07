@@ -65,6 +65,16 @@ fetchPetsOfOwner = (id) => {
     });
 };
 
+//TASK 4
+
+//TASK 5
+
+//TASK 6
+
+//TASK 6 Second Solution
+
+//TASK 7
+
 module.exports = {
   fetchOwnerById,
   fetchOwners,
